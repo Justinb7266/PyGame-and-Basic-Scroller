@@ -1,0 +1,60 @@
+import pygame
+import math
+
+class sailor_moon(pygame.sprite.Sprite):
+    def __init__(self, width, height, pos_x,pos_y,color):
+        super().__init__()
+        self.image = pygame.Surface([width, height])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+        self.rect = [pos_x,pos_y]
+
+pygame.init()
+#create the dispaly window
+SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1500
+
+# Scale the Background
+DEFAULT_IMG_SIZE = (1500, 600)
+
+clock = pygame.time.Clock()
+FPS = 60
+
+bg = pygame.image.load("bacground_img.png")
+# scale the image for background
+bg = pygame.transform.scale(bg, DEFAULT_IMG_SIZE)
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Sailor Moon Runner")
+
+#define game variables
+scroll = 0
+tiles = math.ceil(SCREEN_WIDTH / 1500) + 1
+
+sailor_moon = sailor_moon(50,50,100,(500),(255,255,255))
+
+sailor_moon_group = pygame.sprite.Group()
+sailor_moon_group.add(sailor_moon)
+
+#game loop
+run = True
+while run:
+    screen.fill((0, 0, 0))
+    sailor_moon_group.draw(screen)
+    #scroll background
+    for i in range(0, tiles):
+        screen.blit(bg, (i * 1500 + scroll, 0))
+    scroll -= 5
+
+    #reset scroll
+    if abs(scroll) > 1500:
+        scroll = 0
+
+    clock.tick(FPS)
+    #event handler
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+    pygame.display.flip()
+
+pygame.quit()
